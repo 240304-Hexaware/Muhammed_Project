@@ -3,13 +3,18 @@ package com.example.revatureproject.controllers;
 import java.io.IOException;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.revatureproject.exceptions.ItemNotFoundException;
+import com.example.revatureproject.models.GenericRecord;
 import com.example.revatureproject.services.FileService;
 
 @RestController
@@ -32,11 +37,16 @@ public class FileController {
     }
 
     @PostMapping("/parseFile")
-    public ResponseEntity<List<String>> parseFile(@RequestParam("file") MultipartFile flatFile) throws IOException {
-        List<String> parsedData = fileService.fileParser(flatFile);
-        return ResponseEntity.ok(parsedData);
+    public ResponseEntity<GenericRecord> parseFile(@RequestParam("file") MultipartFile flatFile) throws IOException {
+        GenericRecord record = fileService.fileParser(flatFile);
+        return ResponseEntity.ok(record);
     }
 
+    @GetMapping("/parsedRecord/id/{id}")
+    public ResponseEntity<String> viewRecord(@PathVariable String id) throws ItemNotFoundException {
+        String recordJson = fileService.findRecordById(new ObjectId(id));
+        return ResponseEntity.ok(recordJson);
+    }
     // pass the spec map and data string to a method that reads each field from the flat file string data
     // according to the spec map and insert into a document structure for example:
     // {
