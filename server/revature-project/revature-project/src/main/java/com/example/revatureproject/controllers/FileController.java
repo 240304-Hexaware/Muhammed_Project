@@ -47,6 +47,13 @@ public class FileController {
         String recordJson = fileService.findRecordById(new ObjectId(id));
         return ResponseEntity.ok(recordJson);
     }
+
+    @GetMapping("/parsedRecord/all")
+    public ResponseEntity<List<String>> viewAllRecords() throws ItemNotFoundException {
+        List<String> records = fileService.findAllRecords();
+        return ResponseEntity.ok(records);
+    }
+
     // pass the spec map and data string to a method that reads each field from the flat file string data
     // according to the spec map and insert into a document structure for example:
     // {

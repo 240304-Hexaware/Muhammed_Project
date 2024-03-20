@@ -150,4 +150,14 @@ public class FileService {
         throw new ItemNotFoundException("Record does not exist");
     }
 
+    /*Get all records */
+    public List<String> findAllRecords() {
+        List<GenericRecord> records = genericRecordRepository.findAll();
+        List<String> recordsList = new ArrayList<>();
+        for(Document record : records) {
+            recordsList.add(record.toJson().toString());
+        }
+        return recordsList;
+    }
+
 }
