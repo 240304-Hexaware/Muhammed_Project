@@ -1,0 +1,41 @@
+<h1>File Parser</h1>
+<input type="file" (change)="fileSelected($event)"/>
+<button (click)="upload()">Upload File</button>
+<button (click)="parseFile()">Parse File</button>
+<hr>
+<div *ngIf="responseData">
+    <h2>Data:</h2>
+    <ul>
+      <li *ngFor="let key of getObjectKeys(responseData)">
+        <strong>{{ key }}:</strong> {{ responseData[key] }}
+      </li>
+    </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- <table>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+    </tr>
+    <tr *ngFor="let person of people">
+        <td>{{person.firstName | titlecase}}</td>
+        <td>{{person.lastName | titlecase}}</td>
+        <td>{{person.age}}</td>
+    </tr>
+</table>
+<hr>
+
+<p *ngIf="people[0].age < 100">{{people[0].lastName}}, {{people[0].firstName}}</p>
+<p *ngIf="people[1].age < 100">{{people[1].lastName}}, {{people[1].firstName}}</p>
+<p *ngIf="people[2].age < 100">{{people[2].lastName}}, {{people[2].firstName}}</p>
+<p *ngIf="people[3].age < 100">{{people[3].lastName}}, {{people[3].firstName}}</p> -->
