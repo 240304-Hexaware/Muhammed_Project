@@ -26,6 +26,7 @@ export class FileParserComponent {
     this.file = event.target.files[0];
     console.log("File selected: ", event.target.files[0])
   }
+  
   upload(){}
 
   parseFile() {

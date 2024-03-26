@@ -1,1 +1,23 @@
-<p>records works!</p>
+<h1>Filter Records</h1>
+<h3>Select a Record Type</h3>
+<div>
+    <select (change)="selectType($event)">
+        <option *ngFor="let type of recordTypes" [value]="type">{{ type }}</option>
+    </select>
+</div>
+<div *ngFor="let field of getFieldsForSelectedRecordType()">
+    <label>{{field | titlecase}}</label>
+    <input (change)="updateFilterCriteria(field, $event)" type="text" [placeholder]="field | titlecase">
+</div>
+<button (click)="filter()">Filter Records</button>
+<div *ngIf="responseData">
+    <table>
+        <tr>
+            <th *ngFor="let field of getFields(responseData[0])">{{ field }}</th>
+        </tr>
+        <tr *ngFor="let record of responseData">
+            <td *ngFor="let field of getFields(record)">{{ record[field] }}</td>
+        </tr>
+    </table>
+</div>
+<!-- get fields and display them dynamically, ie for car, there should be 3 input fields labelled with the appropriate fields -->
