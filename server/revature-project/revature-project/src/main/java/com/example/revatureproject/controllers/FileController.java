@@ -6,6 +6,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.revatureproject.exceptions.ItemNotFoundException;
 import com.example.revatureproject.models.GenericRecord;
+import com.example.revatureproject.models.Metadata;
 import com.example.revatureproject.services.FileService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class FileController {
     private FileService fileService;
 
@@ -31,27 +34,21 @@ public class FileController {
     // then read the file and return it as a string
 
     @PostMapping("/uploadFile")
-    public ResponseEntity<String> uploadFile(@RequestParam("flatFile") MultipartFile flatFile) throws IOException {
-        String fileData = fileService.fileToString(flatFile);
-        return ResponseEntity.ok(fileData);
+    public ResponseEntity<Metadata> uploadFile(@RequestParam("file") MultipartFile flatFile) throws IOException {
+        try {
+            Metadata metaData = fileService.uploadFlatFile(flatFile);
+            return ResponseEntity.ok(metaData);
+
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+        
     }
 
     @PostMapping("/parseFile")
-    public ResponseEntity<GenericRecord> parseFile(@RequestParam("file") MultipartFile flatFile) throws IOException {
-        GenericRecord record = fileService.fileParser(flatFile);
+    public ResponseEntity<GenericRecord> parseFile(@RequestParam("file") MultipartFile flatFile, @RequestParam("type") String recordType) throws IOException {
+        GenericRecord record = fileService.fileParser(flatFile, recordType);
         return ResponseEntity.ok(record);
-    }
-
-    @GetMapping("/parsedRecord/id/{id}")
-    public ResponseEntity<String> viewRecord(@PathVariable String id) throws ItemNotFoundException {
-        String recordJson = fileService.findRecordById(new ObjectId(id));
-        return ResponseEntity.ok(recordJson);
-    }
-
-    @GetMapping("/parsedRecord/all")
-    public ResponseEntity<List<String>> viewAllRecords() throws ItemNotFoundException {
-        List<String> records = fileService.findAllRecords();
-        return ResponseEntity.ok(records);
     }
 
     // pass the spec map and data string to a method that reads each field from the flat file string data

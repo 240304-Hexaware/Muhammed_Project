@@ -98,10 +98,22 @@ public class FileService {
         return newRecord;
     }
 
-    public GenericRecord fileParser(MultipartFile flatFile) throws IOException {
+    public GenericRecord fileParser(MultipartFile flatFile, String recordType) throws IOException {
         String fileString = fileToString(flatFile);
+        System.out.println(fileString.length());
         Metadata metadata = uploadFlatFile(flatFile);
-        File specFile = ResourceUtils.getFile("classpath:car.json");
+        File specFile;
+        // String path = "";
+        System.out.println("Type:" + recordType);
+        if(recordType.equals("car")) {
+            specFile = ResourceUtils.getFile("classpath:car.json");
+        }
+        else if(recordType.equals("jet")) {
+            specFile = ResourceUtils.getFile("classpath:jet.json");
+        }
+        else {
+            specFile = ResourceUtils.getFile("classpath:boat.json");
+        }
         Map<String, Field> specMap = parseSpec(specFile);
         List<String> parsedDataList = readStringFields(fileString, specMap);
         GenericRecord record = saveNewRecord(parsedDataList, specMap);
@@ -110,8 +122,14 @@ public class FileService {
     }
 
     public Metadata uploadFlatFile(MultipartFile file) throws IOException {
-        String fileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename().split("\\.")[1];
-
+        //String fileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename().split("\\.")[1];
+        Metadata metadata = new Metadata();
+        String fileName = file.getOriginalFilename();
+        System.out.println("File name: " + fileName);
+        if(!fileName.toLowerCase().endsWith(".txt")) {
+            System.out.println("Wrong File Type");
+            return metadata;
+        }
         // Get the project directory
         String projectDir = System.getProperty("user.dir");
         
@@ -121,6 +139,7 @@ public class FileService {
         File uploadDir = new File(flatFilesDirPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
+            System.out.println("folder does not exist : " + uploadDir.getAbsolutePath());
         }
 
         // Create the file path for the uploaded file
@@ -131,33 +150,11 @@ public class FileService {
         file.transferTo(uploadedFile);
 
         // Save metadata
-        Metadata metadata = new Metadata();
         metadata.setFilePath("/flatfiles/" + fileName); // Set relative path for access
         metadataRepository.save(metadata);
 
         return metadata;
     }
 
-    /*Get record by id, return record as a JSON */
-    public String findRecordById(ObjectId id) throws ItemNotFoundException {
-        Optional<GenericRecord> recordOptional = genericRecordRepository.findById(id);
-        if(recordOptional.isPresent()) {
-            Document record = recordOptional.get();
-            String recordJson = record.toJson().toString();
-            System.out.println(recordJson);
-            return recordJson;
-        }
-        throw new ItemNotFoundException("Record does not exist");
-    }
-
-    /*Get all records */
-    public List<String> findAllRecords() {
-        List<GenericRecord> records = genericRecordRepository.findAll();
-        List<String> recordsList = new ArrayList<>();
-        for(Document record : records) {
-            recordsList.add(record.toJson().toString());
-        }
-        return recordsList;
-    }
 
 }
