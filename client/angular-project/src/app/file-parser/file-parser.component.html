@@ -1,5 +1,10 @@
 <h1>File Parser</h1>
 <input type="file" (change)="fileSelected($event)"/>
+<div>Choose Record Type: 
+  <select (change)="selectType($event)">
+      <option *ngFor="let type of recordTypes" [value]="type">{{ type }}</option>
+  </select>
+</div>
 <button (click)="upload()">Upload File</button>
 <button (click)="parseFile()">Parse File</button>
 <hr>

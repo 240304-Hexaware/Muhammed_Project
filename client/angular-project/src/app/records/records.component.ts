@@ -2,6 +2,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-records',
@@ -16,7 +17,7 @@ export class RecordsComponent {
   recordTypes: string[] = ["car", "jet", "boat"];
 
   carFields : string[] = ["manufacturer", "model", "year"];
-  jetFields : string[] = ["manufacturer", "model", "year", "engineType"];
+  jetFields : string[] = ["manufacturer", "model", "year", "engine-type"];
   boatFields : string[] = ["manufacturer", "model", "year", "color", "length"];
   recordTypeFields : { [key: string]: string[]} = {
     "car": this.carFields,
@@ -36,6 +37,7 @@ export class RecordsComponent {
   selectType(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value; // type cast to get value
     this.selectedRecordType = selectedValue;
+    this.filterCriteria.clear();
   }
 
   getFieldsForSelectedRecordType() {
@@ -56,8 +58,11 @@ export class RecordsComponent {
     
     let params = new HttpParams();
     this.filterCriteria.forEach((value, key) => {
-      console.log(key + ": " + value);
-      params = params.append(key, value);
+      if(value) {
+        console.log(key + ": " + value);
+        params = params.append(key, value);
+      }
+      
     });
 
     console.log(params);      
@@ -68,6 +73,7 @@ export class RecordsComponent {
       responseType: "json"
     }).subscribe({
       next: (data) => {
+        params.delete;
         console.log(data);
         if(data.body != null) {
           this.responseData = data.body.map(item => JSON.parse(item)); // Parse each item into an object
@@ -75,8 +81,13 @@ export class RecordsComponent {
         console.log("responseData:" + JSON.stringify(this.responseData));
       },
       error: (err) => {
-        console.log("error: ", err);
-        
+        if (err.status === 404) {
+          console.log('No records found.');
+          this.responseData = null;
+
+        } else {
+          console.error('An error occurred:', err);
+        }
       }
     })
   }
