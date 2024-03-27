@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.Meta;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,7 @@ import com.example.revatureproject.services.FileService;
 @CrossOrigin(origins = "http://localhost:4200")
 public class FileController {
     private FileService fileService;
+
 
     @Autowired
     public FileController(FileService fileService) {
@@ -51,11 +54,35 @@ public class FileController {
         return ResponseEntity.ok(record);
     }
 
-    // pass the spec map and data string to a method that reads each field from the flat file string data
-    // according to the spec map and insert into a document structure for example:
-    // {
-    //     "manufacturer": "toyota",
-    //     "year": "2009",
-    //     "model": "corolla"
-    // }
+    @GetMapping("/viewFileNames")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<List<String>> getAllFileNames() {
+        List<String> fileNames = fileService.findAllFileNames();
+        if(fileNames == null) { 
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.ok(fileNames);
+    }
+
+    @GetMapping("/viewAll")
+    public ResponseEntity<List<Metadata>> getAllFiles() {
+        List<Metadata> fileNames = fileService.findAllFiles();
+        if(fileNames == null) { 
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.ok(fileNames);
+    }
+
+    @DeleteMapping("/deleteFile/id/{id}")
+    public ResponseEntity<Metadata> removeFileById(@PathVariable String id) throws ItemNotFoundException {
+        try {
+            Metadata deletedFileMetadata = fileService.deleteFileById(new ObjectId(id));
+            return ResponseEntity.ok(deletedFileMetadata);
+
+        } catch (ItemNotFoundException e) {
+            throw new ItemNotFoundException("File to delete was not found!");
+        }
+    }
+
+
 }

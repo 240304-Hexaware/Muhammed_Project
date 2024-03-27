@@ -11,9 +11,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,7 @@ import com.example.revatureproject.exceptions.ItemNotFoundException;
 import com.example.revatureproject.models.Field;
 import com.example.revatureproject.models.GenericRecord;
 import com.example.revatureproject.models.Metadata;
+import com.example.revatureproject.models.User;
 import com.example.revatureproject.repositories.GenericRecordRepository;
 import com.example.revatureproject.repositories.MetadataRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -151,10 +154,40 @@ public class FileService {
 
         // Save metadata
         metadata.setFilePath("/flatfiles/" + fileName); // Set relative path for access
+        metadata.setFileName(fileName);
+        // metadata.setFile(file);
         metadataRepository.save(metadata);
 
         return metadata;
     }
 
+    public List<String> findAllFileNames() {
+        return metadataRepository.findAll().stream()
+            .map(Metadata::getFileName)
+            .collect(Collectors.toList());
+    }
 
+    public List<Metadata> findAllFiles() {
+        return metadataRepository.findAll();
+    }
+
+    public Metadata deleteFileById(ObjectId id) throws ItemNotFoundException{
+
+        try {
+            Metadata metadata = findById(id);
+            System.out.println("****************************Deleting file with ID:" + id+ "****************************");
+            System.out.println("****************************Metadata: " + metadata.toString());
+            metadataRepository.deleteById(id);
+            return metadata;
+        } catch (Exception e) {
+            throw new ItemNotFoundException("File for deletion not found");
+        }
+    }
+
+    public Metadata findById(ObjectId id) throws ItemNotFoundException {
+        /*
+        This returns our result of one exists, otherwise it throws ItemNotFound
+         */
+        return metadataRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Query returned no result."));
+    } 
 }

@@ -49,7 +49,7 @@ public class RecordController {
             List<String> filteredRecords = recordService.findFilteredRecords(params);
             return ResponseEntity.ok(filteredRecords);
         } catch (ItemNotFoundException e) {
-           return ResponseEntity.notFound().build();
+           return ResponseEntity.ok().build();
         }
     }
    

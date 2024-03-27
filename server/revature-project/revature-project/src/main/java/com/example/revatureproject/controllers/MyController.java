@@ -42,7 +42,6 @@ public class MyController {
     /* registration */
     @PostMapping("/registration")
     public ResponseEntity<User> register(@RequestBody User user) throws UserAlreadyExistsException {
-
         User registeredUser = service.insertUser(user);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
 
