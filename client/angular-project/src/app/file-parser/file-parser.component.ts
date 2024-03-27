@@ -69,32 +69,5 @@ export class FileParserComponent {
     return Object.keys(obj);
   }
 
-  upload(){
-    if(this.file == undefined) {
-      alert("Please select a file");
-      return;
-    }
-
-    let formData : FormData = new FormData();
-    formData.append("file", this.file); // body
-    let uploadResponse = this.httpClient.post(this.url + "/uploadFile", formData, {
-      observe: "response",
-      responseType: "json"
-    });
-
-    uploadResponse.subscribe({
-      next: (data) => {
-        console.log("data: ", data);
-        this.responseData = data.body;
-        // let fileName: string | null = "file.txt";
-        // let fileBody: string | null = data.body;
-        // this.downloadFile = new Blob([fileBody as string], {type: "text/plain"});
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log("error: ", error);
-        alert(error.message);
-      }
-    });
-    
-  }
+  
 }

@@ -16,12 +16,13 @@ export class AppComponent {
   constructor(private router: Router) {}
 
   goToFileParser() {
-    // Navigate to route '/route1'
     this.router.navigate(['/parseFile']);
   }
 
   goToRecords() {
-    // Navigate to route '/route2'
     this.router.navigate(['/records']);
+  }
+  goToUpload() {
+    this.router.navigate(['/upload']);
   }
 }
