@@ -37,9 +37,9 @@ public class FileController {
     // then read the file and return it as a string
 
     @PostMapping("/uploadFile")
-    public ResponseEntity<Metadata> uploadFile(@RequestParam("file") MultipartFile flatFile) throws IOException {
+    public ResponseEntity<Metadata> uploadFile(@RequestParam("flatFile") MultipartFile flatFile, @RequestParam("specFile") String folderName) throws IOException {
         try {
-            Metadata metaData = fileService.uploadFlatFile(flatFile);
+            Metadata metaData = fileService.uploadFile(flatFile, folderName);
             return ResponseEntity.ok(metaData);
 
         } catch (Exception e) {
@@ -49,9 +49,12 @@ public class FileController {
     }
 
     @PostMapping("/parseFile")
-    public ResponseEntity<GenericRecord> parseFile(@RequestParam("file") MultipartFile flatFile, @RequestParam("type") String recordType) throws IOException {
-        GenericRecord record = fileService.fileParser(flatFile, recordType);
-        return ResponseEntity.ok(record);
+    public ResponseEntity<List<GenericRecord>> parseFile(@RequestParam("flatFile") MultipartFile flatFile, 
+                                                @RequestParam("specFile") MultipartFile specFile,
+                                                @RequestParam("_recordType") String recordType) throws IOException {
+
+        List<GenericRecord> records = fileService.fileParser(flatFile, specFile, recordType);
+        return ResponseEntity.ok(records);
     }
 
     @GetMapping("/viewFileNames")

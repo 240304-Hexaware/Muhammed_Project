@@ -13,11 +13,20 @@ public class GenericRecord extends org.bson.Document {
     @MongoId(FieldType.OBJECT_ID)
     private ObjectId _id;
 
-    @Field("metadata_id")
-    private ObjectId _metadataId;
+    // add field for type of record (car, boat or jet) as string
+    @Field("_recordType")
+    private String _recordType;
+    // add a username for who uploaded the file to parse this record
+
+    @Field("flat_metadata_id")
+    private ObjectId flat_metadataId;
+
+    @Field("spec_metadata_id")
+    private ObjectId spec_metadataId;
 
     public GenericRecord() {
     }
+
 
     public ObjectId get_id() {
         return this._id;
@@ -27,14 +36,31 @@ public class GenericRecord extends org.bson.Document {
         this._id = _id;
     }
 
-
-    public ObjectId get_metadataId() {
-        return this._metadataId;
+    public String get_recordType() {
+        return this._recordType;
     }
 
-    public void set_metadataId(ObjectId _metadataId) {
-        this._metadataId = _metadataId;
+    public void set_recordType(String _recordType) {
+        this._recordType = _recordType;
     }
+
+    public ObjectId getFlat_metadataId() {
+        return this.flat_metadataId;
+    }
+
+    public void setFlat_metadataId(ObjectId flat_metadataId) {
+        this.flat_metadataId = flat_metadataId;
+    }
+
+    public ObjectId getSpec_metadataId() {
+        return this.spec_metadataId;
+    }
+
+    public void setSpec_metadataId(ObjectId spec_metadataId) {
+        this.spec_metadataId = spec_metadataId;
+    }
+   
+    
 
 
 }

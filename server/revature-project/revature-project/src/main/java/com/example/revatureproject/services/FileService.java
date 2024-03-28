@@ -2,29 +2,25 @@ package com.example.revatureproject.services;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.revatureproject.exceptions.ItemNotFoundException;
 import com.example.revatureproject.models.Field;
 import com.example.revatureproject.models.GenericRecord;
 import com.example.revatureproject.models.Metadata;
-import com.example.revatureproject.models.User;
 import com.example.revatureproject.repositories.GenericRecordRepository;
 import com.example.revatureproject.repositories.MetadataRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,9 +45,11 @@ public class FileService {
      * @return Map of tokens
      * @throws IOException
      */
-    public Map<String, Field> parseSpec(File specFile) throws IOException {
+    public Map<String, Field> parseSpec(MultipartFile specFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Field> map = mapper.readValue(specFile, new TypeReference<Map<String, Field>>() {});
+        File tempFile = File.createTempFile("upload_", ".tmp");
+        specFile.transferTo(tempFile);
+        Map<String, Field> map = mapper.readValue(tempFile, new TypeReference<Map<String, Field>>() {});
 
         Set<String> keySet = map.keySet();
         for(String s : keySet) {
@@ -78,67 +76,84 @@ public class FileService {
      * @return
      * @throws IOException
      */
-    public List<String> readStringFields(String data, Map<String, Field> spec) throws IOException {
-        List<String> fieldList = new ArrayList<>();
-
-        Set<String> fields = spec.keySet();
-        for(String fieldName : fields) {
-            Field field = spec.get(fieldName);
-            String fieldValue = data.substring(field.getStartPos(), field.getEndPos()+1).trim();
-            fieldList.add(fieldValue);
-            System.out.println("[" + fieldName + "][" + fieldValue + "]");
+    public List<Map<String, String>> readStringFields(String data, Map<String, Field> spec) throws IOException {
+        List<Map<String, String>> records = new ArrayList<>();
+        String[] lines = data.split("\r\n|\n");
+        for(String line : lines) {
+            System.out.println(line);
+            Map<String, String> record = new HashMap<>();
+            Set<String> fields = spec.keySet();
+            
+            
+            for(String fieldName : fields) {
+                Field field = spec.get(fieldName);
+                if (line.length() >= field.getEndPos()) {
+                    String fieldValue = line.substring(field.getStartPos(), Math.min(line.length(), field.getEndPos() + 1)).trim();
+                    record.put(fieldName, fieldValue);
+                    System.out.println("[" + fieldName + "][" + fieldValue + "]");
+                }
+            }
+            records.add(record);
         }
-        return fieldList;
+
+        return records;
     }
 
-    public GenericRecord saveNewRecord(List<String> parsedDataList, Map<String, Field> specMap) {
+    public GenericRecord saveNewRecord(Map<String, String> parsedRecord, Map<String, Field> specMap, String recordType) {
         GenericRecord newRecord = new GenericRecord();
-        int fieldIndex = 0;
-        for(String fieldName : specMap.keySet()) {
-            newRecord.append(fieldName, parsedDataList.get(fieldIndex++));
+        
+        for (Map.Entry<String, String> entry : parsedRecord.entrySet()) {
+            String fieldName = entry.getKey();
+            String fieldValue = entry.getValue();
+            newRecord.append(fieldName, fieldValue);
         }
-        genericRecordRepository.save(newRecord);
+        
+        newRecord.append("_recordType", recordType);
         return newRecord;
     }
 
-    public GenericRecord fileParser(MultipartFile flatFile, String recordType) throws IOException {
+    public List<GenericRecord> fileParser(MultipartFile flatFile, MultipartFile specFile, String recordType) throws IOException {
         String fileString = fileToString(flatFile);
+
+        System.out.println(fileString);
         System.out.println(fileString.length());
-        Metadata metadata = uploadFlatFile(flatFile);
-        File specFile;
-        // String path = "";
         System.out.println("Type:" + recordType);
-        if(recordType.equals("car")) {
-            specFile = ResourceUtils.getFile("classpath:car.json");
-        }
-        else if(recordType.equals("jet")) {
-            specFile = ResourceUtils.getFile("classpath:jet.json");
-        }
-        else {
-            specFile = ResourceUtils.getFile("classpath:boat.json");
-        }
+
+        Metadata flatMetadata = uploadFile(flatFile, "flatfiles");
+
         Map<String, Field> specMap = parseSpec(specFile);
-        List<String> parsedDataList = readStringFields(fileString, specMap);
-        GenericRecord record = saveNewRecord(parsedDataList, specMap);
-        record.set_metadataId(metadata.get_id());
-        return record; 
+        List<Map<String, String>> parsedRecords = readStringFields(fileString, specMap);
+        List<GenericRecord> records = new ArrayList<>();
+
+        for(Map<String, String> parsedRecord : parsedRecords) {
+            GenericRecord record = saveNewRecord(parsedRecord, specMap, recordType); // Save each record individually
+            record.setFlat_metadataId(flatMetadata.get_id());
+            record.set_recordType(recordType);
+            System.out.println("flat metadata id:" + record.getFlat_metadataId());
+            System.out.println("record type:" + record.get_recordType());
+        
+            records.add(record);
+        }
+
+        //Metadata specMetadata = uploadFile(specFile, "specfiles");
+        //record.setSpec_metadataId(specMetadata.get_id());
+        genericRecordRepository.saveAll(records);
+        return records; 
     }
 
-    public Metadata uploadFlatFile(MultipartFile file) throws IOException {
-        //String fileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename().split("\\.")[1];
+    
+
+    public Metadata uploadFile(MultipartFile file, String folder) throws IOException {
         Metadata metadata = new Metadata();
         String fileName = file.getOriginalFilename();
         System.out.println("File name: " + fileName);
-        if(!fileName.toLowerCase().endsWith(".txt")) {
-            System.out.println("Wrong File Type");
-            return metadata;
-        }
+
         // Get the project directory
         String projectDir = System.getProperty("user.dir");
         
         // path for the flatfiles directory
-        String flatFilesDirPath = projectDir + File.separator + "flatfiles";
-
+        String flatFilesDirPath = projectDir + File.separator + folder;
+        System.out.println("flatFilesDirPath = " + flatFilesDirPath);
         File uploadDir = new File(flatFilesDirPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
@@ -146,14 +161,18 @@ public class FileService {
         }
 
         // Create the file path for the uploaded file
-        String filePath = flatFilesDirPath + File.separator + fileName;
-        File uploadedFile = new File(filePath);
+        // String filePath = flatFilesDirPath + File.separator + fileName;
+        String filePath = flatFilesDirPath + File.separator;
+
+        System.out.println("filePath: " + filePath);
+        File uploadedFile = new File(filePath, fileName);
 
         // Transfer the uploaded file to the specified path
         file.transferTo(uploadedFile);
-
+        // Use InputStream and Files.copy to write the file to the target directory
+        
         // Save metadata
-        metadata.setFilePath("/flatfiles/" + fileName); // Set relative path for access
+        metadata.setFilePath("/"+ folder + "/" + fileName); // Set relative path for access
         metadata.setFileName(fileName);
         // metadata.setFile(file);
         metadataRepository.save(metadata);

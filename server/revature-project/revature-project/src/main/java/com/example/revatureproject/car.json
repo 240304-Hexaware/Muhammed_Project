@@ -1,0 +1,17 @@
+{
+  "manufacturer": {
+    "start_pos": 0,
+    "end_pos": 19,
+    "dataType": "String"
+  },
+  "model": {
+    "start_pos": 20,
+    "end_pos": 39,
+    "dataType": "String"
+  },
+  "year": {
+    "start_pos": 40,
+    "end_pos": 43,
+    "dataType": "String"
+  }
+}
