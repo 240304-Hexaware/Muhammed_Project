@@ -64,7 +64,7 @@ export class RecordsComponent {
       }
       
     });
-
+    params = params.append("_recordType", this.selectedRecordType);
     console.log(params);      
     
     this.httpClient.get<string[]>(this.url + "parsedRecords/filter", {

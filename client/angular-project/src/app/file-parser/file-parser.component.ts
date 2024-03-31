@@ -13,7 +13,8 @@ export class FileParserComponent {
   url : string = "http://localhost:8080";
   title = 'client';
   httpClient: HttpClient;
-  file: File | undefined;
+  flatFile: File | undefined;
+  specFile: File | undefined;
   downloadFile: Blob | undefined;
   public responseData: any;
   selectedRecordType: string = "car";
@@ -29,21 +30,32 @@ export class FileParserComponent {
     this.selectedRecordType = selectedValue;
   }
 
-  fileSelected(event: any) {
-    this.file = event.target.files[0];
+  flatFileSelected(event: any) {
+    this.flatFile = event.target.files[0];
     console.log("File selected: ", event.target.files[0])
   }
 
+  specFileSelected(event: any) {
+    this.specFile = event.target.files[0];
+    console.log("File selected: ", event.target.files[0])
+  }
 
   parseFile() {
-    if(this.file == undefined) {
-      alert("Please select a file");
+    if(this.flatFile == undefined) {
+      alert("Please select a flat file");
       return;
     }
 
+    if(this.specFile == undefined) {
+      alert("Please select a specification file");
+      return;
+    }
+
+    // body
     let form : FormData = new FormData();
-    form.append("file", this.file); // body
-    form.append("type", this.selectedRecordType); 
+    form.append("flatFile", this.flatFile); 
+    form.append("specFile", this.specFile); 
+    form.append("_recordType", this.selectedRecordType); 
     let response = this.httpClient.post(this.url + "/parseFile", form, {
       observe: "response",
       responseType: "json"

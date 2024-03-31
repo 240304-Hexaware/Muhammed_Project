@@ -1,5 +1,8 @@
 <h1>File Parser</h1>
-<input type="file" (change)="fileSelected($event)"/>
+<h3>Select a Flat File:</h3>
+<input type="file" (change)="flatFileSelected($event)"/>
+<h3>Select a Specification File:</h3>
+<input type="file" (change)="specFileSelected($event)"/>
 <div>Choose Record Type: 
   <select (change)="selectType($event)">
       <option *ngFor="let type of recordTypes" [value]="type">{{ type }}</option>
@@ -9,9 +12,9 @@
 <hr>
 <div *ngIf="responseData">
     <h2>Data:</h2>
-    <ul>
-      <li *ngFor="let key of getObjectKeys(responseData)">
-        <strong>{{ key }}:</strong> {{ responseData[key] }}
+    <ul *ngFor="let record of responseData">
+      <li *ngFor="let key of getObjectKeys(record)">
+        <strong>{{ key }}:</strong> {{ record[key] }}
       </li>
     </ul>
 </div>
