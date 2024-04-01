@@ -99,7 +99,7 @@ public class FileService {
         return records;
     }
 
-    public GenericRecord saveNewRecord(Map<String, String> parsedRecord, Map<String, Field> specMap, String recordType) {
+    public GenericRecord saveNewRecord(Map<String, String> parsedRecord, Map<String, Field> specMap, String recordType, String recordUser) {
         GenericRecord newRecord = new GenericRecord();
         
         for (Map.Entry<String, String> entry : parsedRecord.entrySet()) {
@@ -109,10 +109,12 @@ public class FileService {
         }
         
         newRecord.append("_recordType", recordType);
+        newRecord.append("recordUser", recordUser);
+
         return newRecord;
     }
 
-    public List<GenericRecord> fileParser(MultipartFile flatFile, MultipartFile specFile, String recordType) throws IOException {
+    public List<GenericRecord> fileParser(MultipartFile flatFile, MultipartFile specFile, String recordType, String recordUser) throws IOException {
         String fileString = fileToString(flatFile);
 
         System.out.println(fileString);
@@ -126,9 +128,12 @@ public class FileService {
         List<GenericRecord> records = new ArrayList<>();
 
         for(Map<String, String> parsedRecord : parsedRecords) {
-            GenericRecord record = saveNewRecord(parsedRecord, specMap, recordType); // Save each record individually
+            GenericRecord record = saveNewRecord(parsedRecord, specMap, recordType, recordUser); // Save each record individually
             record.setFlat_metadataId(flatMetadata.get_id());
             record.set_recordType(recordType);
+            record.setRecordUser(recordUser);
+            System.out.println("Record User:" + recordUser);
+            // System.out.println("Record User:" + record.getRecordUser());
             System.out.println("flat metadata id:" + record.getFlat_metadataId());
             System.out.println("record type:" + record.get_recordType());
         

@@ -63,9 +63,6 @@ public class MyController {
                 authCookie.setPath("/");
 
                 response.addCookie(authCookie);
-
-                // Assuming you might want to return some user info (excluding sensitive info
-                // like passwords)
                 return ResponseEntity.ok().body("Login Successful. Token set in cookie.");
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login Failed");

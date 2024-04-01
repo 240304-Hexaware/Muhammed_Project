@@ -51,9 +51,10 @@ public class FileController {
     @PostMapping("/parseFile")
     public ResponseEntity<List<GenericRecord>> parseFile(@RequestParam("flatFile") MultipartFile flatFile, 
                                                 @RequestParam("specFile") MultipartFile specFile,
-                                                @RequestParam("_recordType") String recordType) throws IOException {
+                                                @RequestParam("_recordType") String recordType,
+                                                @RequestParam("recordUser") String recordUser) throws IOException {
 
-        List<GenericRecord> records = fileService.fileParser(flatFile, specFile, recordType);
+        List<GenericRecord> records = fileService.fileParser(flatFile, specFile, recordType, recordUser);
         return ResponseEntity.ok(records);
     }
 

@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.example.revatureproject.auth.JwtTokenProvider;
 import com.example.revatureproject.exceptions.ItemNotFoundException;
 import com.example.revatureproject.models.GenericRecord;
 import com.example.revatureproject.repositories.GenericRecordRepository;
@@ -24,11 +26,14 @@ public class RecordService {
     private GenericRecordRepository genericRecordRepository;
     private MetadataRepository metadataRepository;
     private MongoTemplate mongoTemplate;
+    private JwtTokenProvider jwtTokenProvider;
 
-    public RecordService(GenericRecordRepository genericRecordRepository, MetadataRepository metadataRepository, MongoTemplate mongoTemplate) {
+    @Autowired
+    public RecordService(GenericRecordRepository genericRecordRepository, MetadataRepository metadataRepository, MongoTemplate mongoTemplate, JwtTokenProvider jwtTokenProvider) {
         this.genericRecordRepository = genericRecordRepository;
         this.metadataRepository = metadataRepository;
         this.mongoTemplate = mongoTemplate;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     /*Get record by id, return record as a JSON */
@@ -56,7 +61,9 @@ public class RecordService {
     /*Get records based on fields*/
     public List<String> findFilteredRecords(Map<String, String> params) throws ItemNotFoundException {
         Query query = new Query();
+        // params.put("recordUser", recordUser);
         params.forEach((key, value) -> {
+            System.out.println("key: " + key + " value: " + value);
             query.addCriteria(Criteria.where(key).is(value));
         });
         List<Document> documents = mongoTemplate.find(query, Document.class, "record");
