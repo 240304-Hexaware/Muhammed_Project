@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { catchError } from 'rxjs';
+import { LoginService } from '../login/login.service';
 
 @Component({
   selector: 'app-records',
@@ -28,7 +29,7 @@ export class RecordsComponent {
   url : string = "http://localhost:8080/";
   httpClient : HttpClient;
 
-  constructor(httpClient : HttpClient) {
+  constructor(httpClient : HttpClient, private loginService : LoginService) {
     this.httpClient = httpClient;
   };
 
@@ -65,6 +66,12 @@ export class RecordsComponent {
       
     });
     params = params.append("_recordType", this.selectedRecordType);
+    const username : string | null = localStorage.getItem('username');
+    console.log("username:" + username); // this shows the value as blank
+    console.log("logged in: " + this.loginService.isLoggedIn);
+    if(username != null) {
+      params = params.append("recordUser", username);
+    }
     console.log(params);      
     
     this.httpClient.get<string[]>(this.url + "parsedRecords/filter", {

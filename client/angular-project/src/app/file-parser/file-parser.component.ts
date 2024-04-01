@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { LoginService } from '../login/login.service';
 
 @Component({
   selector: 'app-file-parser',
@@ -20,7 +21,7 @@ export class FileParserComponent {
   selectedRecordType: string = "car";
   recordTypes: string[] = ["car", "jet", "boat"];
 
-  constructor(httpClient: HttpClient) {
+  constructor(httpClient: HttpClient, private loginService : LoginService) {
     /* the HttpClient needs to be provided, see app.config.ts */
     this.httpClient = httpClient;
   }
@@ -53,9 +54,13 @@ export class FileParserComponent {
 
     // body
     let form : FormData = new FormData();
+    const username : string | null = localStorage.getItem('username');
     form.append("flatFile", this.flatFile); 
-    form.append("specFile", this.specFile); 
-    form.append("_recordType", this.selectedRecordType); 
+    form.append("specFile", this.specFile);
+    form.append("_recordType", this.selectedRecordType);
+    if(username != null) {
+      form.append("recordUser", username);
+    }
     let response = this.httpClient.post(this.url + "/parseFile", form, {
       observe: "response",
       responseType: "json"

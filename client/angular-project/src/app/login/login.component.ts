@@ -23,6 +23,9 @@ export class LoginComponent {
           console.log(response.body); // Handle plain text response
           if(response.body == "Login Successful. Token set in cookie.") {
             this.loginService.isLoggedIn = true;
+            this.loginService.setUser(this.username);
+            console.log("Username: " + this.loginService.getUser());
+            localStorage.setItem('username', this.username);
             this.router.navigate(['/parseFile']);
             console.log("logged in: " + this.loginService.isLoggedIn);
           }
