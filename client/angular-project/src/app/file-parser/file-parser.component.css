@@ -1,0 +1,80 @@
+
+.header {
+    text-align: center; /* Center the select element horizontally */
+    margin: 0 auto;
+  }
+
+  select {
+    width: 20%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .record-type-selection {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 20%;
+    margin: 0 auto; 
+  }
+
+  /* Label Element */
+  label {
+    margin-right: 1rem; /* Add right margin for spacing between label and input */
+  }
+
+
+  .file-upload {
+    display: flex;
+    /* Removed justify-content: space-between; (unnecessary for equal width) */
+    align-items: center; /* Align vertically in the middle */
+    width: 25%; /* Adjust width as needed */
+    margin: 0 auto; /* Center horizontally */ /* Adjust margin for spacing */
+  }
+  
+  .file-upload label,
+  .file-upload input[type="text"] {
+    flex: 1; /* Make both elements take up equal space */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-right: 1rem; /* Remove for no spacing between elements */
+  }
+
+  .parse-file-button{
+    display: flex;
+    justify-content: center;
+  }
+
+  .record-table-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .record-table {
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    margin-bottom: 1rem; /* Adjust margin for spacing between tables */
+    width: 250px; /* Adjust width as needed */
+    display: table; /* Use 'table' display for proper column layout */
+  }
+  
+  .record-table th,
+  .record-table td {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .record-table th {
+    font-weight: bold;
+  }
+  
+  /* Optional grid padding */
+  .grid-pad {
+    padding: 1rem; /* Adjust padding for spacing within the grid */
+  }

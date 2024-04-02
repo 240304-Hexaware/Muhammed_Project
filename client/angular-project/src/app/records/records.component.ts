@@ -26,7 +26,7 @@ export class RecordsComponent {
     "boat": this.boatFields
   }
   responseData : any;
-  url : string = "http://localhost:8080/";
+  url : string = "http://localhost:8080";
   httpClient : HttpClient;
 
   constructor(httpClient : HttpClient, private loginService : LoginService) {
@@ -65,6 +65,7 @@ export class RecordsComponent {
       }
       
     });
+    this.responseData = null;
     params = params.append("_recordType", this.selectedRecordType);
     const username : string | null = localStorage.getItem('username');
     console.log("username:" + username); // this shows the value as blank
@@ -74,13 +75,14 @@ export class RecordsComponent {
     }
     console.log(params);      
     
-    this.httpClient.get<string[]>(this.url + "parsedRecords/filter", {
+    this.httpClient.get<string[]>(this.url + "/parsedRecords/filter", {
       params:params,
       observe: "response",
       responseType: "json"
     }).subscribe({
       next: (data) => {
         params.delete;
+        console.log(params);
         console.log(data);
         if(data.body != null) {
           this.responseData = data.body.map(item => JSON.parse(item)); // Parse each item into an object
@@ -99,7 +101,44 @@ export class RecordsComponent {
     })
   }
 
+  viewAll() {
+    const username : string | null = localStorage.getItem('username');
+    this.httpClient.get<string[]>(this.url + "/parsedRecord/user/" + username, {
+      observe: "response",
+      responseType: "json"
+    }).subscribe({
+      next: (data) => {
+        console.log(data);
+        if(data.body != null) {
+          this.responseData = data.body.map(item => JSON.parse(item)); // Parse each item into an object
+        }
+        console.log("responseData:" + JSON.stringify(this.responseData));
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          console.log('No records found.');
+          this.responseData = null;
+        } else {
+          console.error('An error occurred:', err);
+        }
+      }
+    })
+  }
+
   getFields(obj : any) : string[] {
-    return Object.keys(obj);
+    const recordType = obj['_recordType']; // Access the "_recordType" field
+    if (recordType && this.recordTypeFields[recordType]) {
+      return this.recordTypeFields[recordType];
+    }
+    return Object.keys(obj); // Fallback for unknown record types
+  }
+  
+  getUniqueFields(obj: any): string[] {
+    // Use a Set to ensure unique values
+    const uniqueFields = new Set<string>();
+    for (const record of this.responseData) {
+      Object.keys(record).forEach((field) => uniqueFields.add(field));
+    }
+    return Array.from(uniqueFields);
   }
 }

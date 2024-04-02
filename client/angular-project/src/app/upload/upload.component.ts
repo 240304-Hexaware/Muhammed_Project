@@ -38,16 +38,12 @@ export class UploadComponent {
         console.log("data: ", data);
         this.responseData = data.body;
         this.getFileNames();
-        // let fileName: string | null = "file.txt";
-        // let fileBody: string | null = data.body;
-        // this.downloadFile = new Blob([fileBody as string], {type: "text/plain"});
       },
       error: (error: HttpErrorResponse) => {
         console.log("error: ", error);
         alert(error.message);
       }
     });
-    
   }
 
   getFileNames() : void {

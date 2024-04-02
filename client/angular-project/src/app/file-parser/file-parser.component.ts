@@ -20,7 +20,14 @@ export class FileParserComponent {
   public responseData: any;
   selectedRecordType: string = "car";
   recordTypes: string[] = ["car", "jet", "boat"];
-
+  carFields : string[] = ["manufacturer", "model", "year"];
+  jetFields : string[] = ["manufacturer", "model", "year", "engine-type"];
+  boatFields : string[] = ["manufacturer", "model", "year", "color", "length"];
+  recordTypeFields : { [key: string]: string[]} = {
+    "car": this.carFields,
+    "jet": this.jetFields,
+    "boat": this.boatFields
+  }
   constructor(httpClient: HttpClient, private loginService : LoginService) {
     /* the HttpClient needs to be provided, see app.config.ts */
     this.httpClient = httpClient;
@@ -86,5 +93,11 @@ export class FileParserComponent {
     return Object.keys(obj);
   }
 
-  
+  getFields(obj : any) : string[] {
+    const recordType = obj['_recordType']; // Access the "_recordType" field
+    if (recordType && this.recordTypeFields[recordType]) {
+      return this.recordTypeFields[recordType];
+    }
+    return Object.keys(obj); // Fallback for unknown record types
+  }
 }

@@ -1,48 +1,51 @@
-<h1>File Parser</h1>
-<h3>Select a Flat File:</h3>
-<input type="file" (change)="flatFileSelected($event)"/>
-<h3>Select a Specification File:</h3>
-<input type="file" (change)="specFileSelected($event)"/>
-<div>Choose Record Type: 
-  <select (change)="selectType($event)">
-      <option *ngFor="let type of recordTypes" [value]="type">{{ type }}</option>
+<h1 class="header">File Parser</h1>
+<div class="file-selection" fxLayout="row" fxLayoutGap="20px">
+  <div class="file-upload" fxFlex="50">
+    <label class="upload-label">Flat File:</label>
+    <input type="file" (change)="flatFileSelected($event)" />
+  </div>
+  <div class="file-upload" fxFlex="50">
+    <label class="upload-label">Specification File:</label>
+    <input type="file" (change)="specFileSelected($event)" />
+  </div>
+</div>
+<div class="record-type-selection" fxLayout="row" fxLayoutAlign="center center">
+  <select (change)="selectType($event)" fxFlex>
+    <option *ngFor="let type of recordTypes" [value]="type">{{ type }}</option>
   </select>
 </div>
-<button (click)="parseFile()">Parse File</button>
-<hr>
-<div *ngIf="responseData">
-    <h2>Data:</h2>
-    <ul *ngFor="let record of responseData">
-      <li *ngFor="let key of getObjectKeys(record)">
-        <strong>{{ key }}:</strong> {{ record[key] }}
-      </li>
-    </ul>
+<div class="parse-file-button">
+  <button (click)="parseFile()">Parse File</button>
 </div>
-
-
-
-
-
-
-
-
-
-
-<!-- <table>
-    <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Age</th>
-    </tr>
-    <tr *ngFor="let person of people">
-        <td>{{person.firstName | titlecase}}</td>
-        <td>{{person.lastName | titlecase}}</td>
-        <td>{{person.age}}</td>
-    </tr>
-</table>
 <hr>
-
-<p *ngIf="people[0].age < 100">{{people[0].lastName}}, {{people[0].firstName}}</p>
-<p *ngIf="people[1].age < 100">{{people[1].lastName}}, {{people[1].firstName}}</p>
-<p *ngIf="people[2].age < 100">{{people[2].lastName}}, {{people[2].firstName}}</p>
-<p *ngIf="people[3].age < 100">{{people[3].lastName}}, {{people[3].firstName}}</p> -->
+<div *ngIf="responseData && responseData.length > 0">
+  <div class="record-table-grid" fxLayout="row wrap" fxLayoutGap="10px grid-pad">
+    <div class="record-table" *ngFor="let record of responseData" fxLayout="column">
+      <table>
+        <tr *ngFor="let field of getFields(record)">
+          <th *ngIf="record[field] && field != '_id' && field != 'recordUser'">{{ field }}</th>
+          <td *ngIf="record[field] && field != '_id' && field != 'recordUser'">{{ record[field] }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- <div *ngIf="responseData && responseData.length > 0">
+  <table class="records-container">
+    <thead>
+      <tr>
+        <th *ngFor="let field of getObjectKeys(responseData[0])">{{ field }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of responseData">
+        <td *ngFor="let key of getObjectKeys(record)">
+          {{ record[key] }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+<div *ngIf="!responseData && responseData == undefined">
+  No data found
+</div>
