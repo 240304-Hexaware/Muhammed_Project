@@ -35,9 +35,10 @@ public class RecordController {
         return ResponseEntity.ok(recordJson);
     }
 
-    @GetMapping("/parsedRecord/all")
-    public ResponseEntity<List<String>> viewAllRecords() throws ItemNotFoundException {
-        List<String> records = recordService.findAllRecords();
+    @GetMapping("/parsedRecord/user/{username}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<List<String>> viewAllRecords(@PathVariable String username) throws ItemNotFoundException {
+        List<String> records = recordService.findAllRecords(username);
         return ResponseEntity.ok(records);
     }
 

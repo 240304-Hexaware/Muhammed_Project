@@ -49,8 +49,8 @@ public class RecordService {
     }
 
     /*Get all records */
-    public List<String> findAllRecords() {
-        List<GenericRecord> records = genericRecordRepository.findAll();
+    public List<String> findAllRecords(String recordUser) {
+        List<GenericRecord> records = genericRecordRepository.findByRecordUser(recordUser);
         List<String> recordsList = new ArrayList<>();
         for(Document record : records) {
             recordsList.add(record.toJson().toString());
