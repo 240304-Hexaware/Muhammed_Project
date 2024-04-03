@@ -1,0 +1,84 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+  
+.login-container {
+    /* display: flex; */
+    margin-top: 150px;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;    
+}
+  /* Style the login form container */
+  .login-form {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px; /* Adjust width as needed */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: box-shadow 0.2s ease-in-out; /* Add hover effect */
+    margin: 0 auto;
+  }
+  
+  /* Increased shadow on hover */
+  .login-form:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Increase shadow size and opacity */
+  }
+  /* Style form labels */
+  label {
+    display: block; /* Display each label on a new line */
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  /* Style form inputs */
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Slightly less rounded corners than form */
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  /* Style the submit button */
+  button[type="submit"] {
+    background-color: #4c89af; /* Green color for login */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+    margin: 10px;
+  }
+  
+  /* Add hover effect to submit button */
+  button[type="submit"]:hover {
+    background-color: #3e8e41; /* Darker green on hover */
+  }
+  
+  /* Style the registration link */
+  .login-register {
+    display: block; /* Display on a new line */
+    margin-top: 10px;
+    text-align: center;
+    color: #333; /* Gray color for link */
+    transition: color 0.2s ease-in-out; /* Smooth hover effect */
+  }
+  
+  /* Add hover effect to registration link */
+  .login-register:hover {
+    color: #007bff; /* Blue color on hover */
+    text-decoration: underline; /* Add underline on hover */
+  }

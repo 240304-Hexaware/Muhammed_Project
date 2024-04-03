@@ -21,7 +21,7 @@ export class FileParserComponent {
   selectedRecordType: string = "car";
   recordTypes: string[] = ["car", "jet", "boat"];
   carFields : string[] = ["manufacturer", "model", "year"];
-  jetFields : string[] = ["manufacturer", "model", "year", "engine-type"];
+  jetFields : string[] = ["manufacturer", "model", "year", "engineType"];
   boatFields : string[] = ["manufacturer", "model", "year", "color", "length"];
   recordTypeFields : { [key: string]: string[]} = {
     "car": this.carFields,
@@ -96,6 +96,9 @@ export class FileParserComponent {
   getFields(obj : any) : string[] {
     const recordType = obj['_recordType']; // Access the "_recordType" field
     if (recordType && this.recordTypeFields[recordType]) {
+      console.log("record fields:" + this.recordTypeFields[recordType]);
+      console.log("record type:" + recordType);
+
       return this.recordTypeFields[recordType];
     }
     return Object.keys(obj); // Fallback for unknown record types

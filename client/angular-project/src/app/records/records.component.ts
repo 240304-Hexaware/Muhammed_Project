@@ -18,7 +18,7 @@ export class RecordsComponent {
   recordTypes: string[] = ["car", "jet", "boat"];
 
   carFields : string[] = ["manufacturer", "model", "year"];
-  jetFields : string[] = ["manufacturer", "model", "year", "engine-type"];
+  jetFields : string[] = ["manufacturer", "model", "year", "engineType"];
   boatFields : string[] = ["manufacturer", "model", "year", "color", "length"];
   recordTypeFields : { [key: string]: string[]} = {
     "car": this.carFields,

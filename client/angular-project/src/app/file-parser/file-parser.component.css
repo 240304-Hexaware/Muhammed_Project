@@ -1,7 +1,11 @@
+/* .file-parser-view {
 
+*/
 .header {
     text-align: center; /* Center the select element horizontally */
     margin: 0 auto;
+    margin-top: 40px;
+    margin-bottom: 20px;
   }
 
   select {
@@ -49,14 +53,46 @@
     justify-content: center;
   }
 
+  .btn {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #0f62fe;
+    text-align: left;
+    vertical-align: top;
+    padding: calc(.375rem - 3px) 60px calc(.375rem - 3px) 12px;
+    background-color: #00000000;
+    font-size: 14px;
+    letter-spacing: 0.16px;
+    min-height: 32px;
+    line-height: 1.29;
+    color: #0f62fe;
+    font-weight: 400;
+    margin-bottom: 15px;
+    transition: background 70ms cubic-bezier(0,0,.38,.9),box-shadow 70ms cubic-bezier(0,0,.38,.9),border-color 70ms cubic-bezier(0,0,.38,.9),outline 70ms cubic-bezier(0,0,.38,.9);
+    /* margin-bottom: 10px; */
+}
+
+  .btn:hover {
+    background-color: #0353e9;
+    color: #fff;
+}
+
+  .parsed-record-containter {
+
+    display: flex;
+    justify-content: center;
+  }
+
   .record-table-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    
   }
   
   .record-table {
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-collapse: collapse;
     margin-bottom: 1rem; /* Adjust margin for spacing between tables */
     width: 250px; /* Adjust width as needed */

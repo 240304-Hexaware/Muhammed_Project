@@ -10,30 +10,31 @@
 </div>
 <div *ngFor="let field of getFieldsForSelectedRecordType()" class="filter-criteria">
     <label fxFlex="20">{{ field | titlecase }}</label>
-    <input (change)="updateFilterCriteria(field, $event)" type="text" [placeholder]="field | titlecase" fxFlex="80">
+    <input (input)="updateFilterCriteria(field, $event)" type="text" [placeholder]="field | titlecase" fxFlex="80">
   </div>
+<hr>
 
 <div class="records-container">
-    <div class="filter-buttons">
-        <button (click)="filter()">Filter Records</button>
-        <button (click)="viewAll()">View All Records</button>
-    </div>
-
-  <div *ngIf="responseData && responseData.length > 0">
-    <div class="record-table-grid" fxLayout="row wrap" fxLayoutGap="10px grid-pad">
-      <div class="record-table" *ngFor="let record of responseData" fxLayout="column">
-        <table>
-          <tr *ngFor="let field of getFields(record)">
-            <th *ngIf="record[field] && field != '_id' && field != 'recordUser'">{{ field }}</th>
-            <td *ngIf="record[field] && field != '_id' && field != 'recordUser'">{{ record[field] }}</td>
-          </tr>
-        </table>
+  <div class="filter-buttons">
+      <button class="btn" (click)="filter()">Filter Records</button>
+      <button class="btn" (click)="viewAll()">View All Records</button> 
+  </div>
+  <div class="parsed-record-containter">
+    <div *ngIf="responseData && responseData.length > 0" style="width: 70%;">
+      <div class="record-table-grid" fxLayout="row wrap" fxLayoutGap="10px grid-pad">
+        <div class="record-table" *ngFor="let record of responseData" fxLayout="column">
+          <table>
+            <tr *ngFor="let field of getFields(record)">
+              <th *ngIf="record[field] && field != '_id' && field != 'recordUser'">{{ field }}</th>
+              <td *ngIf="record[field] && field != '_id' && field != 'recordUser'">{{ record[field] }}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div *ngIf="!responseData && responseData == undefined">
-    No records found
+    <div *ngIf="!responseData && responseData == undefined">
+      No data found
+    </div>
   </div>
 </div>
 <!-- <button (click)="filter()">Filter Records</button>
