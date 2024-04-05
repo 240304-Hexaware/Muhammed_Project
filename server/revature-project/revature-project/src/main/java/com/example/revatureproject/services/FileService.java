@@ -84,7 +84,6 @@ public class FileService {
             Map<String, String> record = new HashMap<>();
             Set<String> fields = spec.keySet();
             
-            
             for(String fieldName : fields) {
                 Field field = spec.get(fieldName);
                 if (line.length() >= field.getEndPos()) {
@@ -114,35 +113,36 @@ public class FileService {
         return newRecord;
     }
 
-    public List<GenericRecord> fileParser(MultipartFile flatFile, MultipartFile specFile, String recordType, String recordUser) throws IOException {
-        String fileString = fileToString(flatFile);
+    /**
+     * Parses a flat file and specification file, creates and saves GenericRecord objects
+     * @param flatFile       The MultipartFile containing the flat file to parse
+     * @param specFile       The MultipartFile containing the specification file
+     * @param recordType     The type of records being parsed
+     * @param recordUser     The user associated with the records
+     * @return A List of GenericRecord objects representing parsed records
+     * @throws IOException  If an error occurs during file parsing or data processing
+     */
+    public List<GenericRecord> fileParser(MultipartFile flatFile, MultipartFile specFile, 
+                                          String recordType, String recordUser) throws IOException {
+        
+        String fileString = fileToString(flatFile); // convert file contents to string
 
-        System.out.println(fileString);
-        System.out.println(fileString.length());
-        System.out.println("Type:" + recordType);
+        // upload file to object storage, store file path and metadata
+        Metadata flatMetadata = uploadFile(flatFile, "flatfiles"); 
 
-        Metadata flatMetadata = uploadFile(flatFile, "flatfiles");
-
-        Map<String, Field> specMap = parseSpec(specFile);
-        List<Map<String, String>> parsedRecords = readStringFields(fileString, specMap);
+        Map<String, Field> specMap = parseSpec(specFile); // get record fields and specs 
+        List<Map<String, String>> parsedRecords = readStringFields(fileString, specMap); // get list of all records
         List<GenericRecord> records = new ArrayList<>();
 
-        for(Map<String, String> parsedRecord : parsedRecords) {
-            GenericRecord record = saveNewRecord(parsedRecord, specMap, recordType, recordUser); // Save each record individually
+        for(Map<String, String> parsedRecord : parsedRecords) { // Save each record individually
+            GenericRecord record = saveNewRecord(parsedRecord, specMap, recordType, recordUser); 
             record.setFlat_metadataId(flatMetadata.get_id());
             record.set_recordType(recordType);
             record.setRecordUser(recordUser);
-            System.out.println("Record User:" + recordUser);
-            // System.out.println("Record User:" + record.getRecordUser());
-            System.out.println("flat metadata id:" + record.getFlat_metadataId());
-            System.out.println("record type:" + record.get_recordType());
-        
             records.add(record);
         }
 
-        //Metadata specMetadata = uploadFile(specFile, "specfiles");
-        //record.setSpec_metadataId(specMetadata.get_id());
-        genericRecordRepository.saveAll(records);
+        genericRecordRepository.saveAll(records); // persist all records
         return records; 
     }
 
@@ -166,7 +166,6 @@ public class FileService {
         }
 
         // Create the file path for the uploaded file
-        // String filePath = flatFilesDirPath + File.separator + fileName;
         String filePath = flatFilesDirPath + File.separator;
 
         System.out.println("filePath: " + filePath);
@@ -199,8 +198,6 @@ public class FileService {
 
         try {
             Metadata metadata = findById(id);
-            System.out.println("****************************Deleting file with ID:" + id+ "****************************");
-            System.out.println("****************************Metadata: " + metadata.toString());
             metadataRepository.deleteById(id);
             return metadata;
         } catch (Exception e) {

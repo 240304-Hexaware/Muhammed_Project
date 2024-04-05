@@ -119,27 +119,10 @@ public class MyController {
 
     }
 
-    /* Update role */
-    // @PatchMapping("users/admin/updateRole")
-    // public ResponseEntity<User> changeRole(@RequestBody List<User> users) throws
-    // ItemNotFoundException, InvalidUserException{
-    // try{
-    // User userAdmin = users.get(0);
-    // User user = users.get(1);
-
-    // User updatedUser = service.updateRole(userAdmin, user);
-    // return ResponseEntity.ok(updatedUser);
-    // }
-    // catch (ItemNotFoundException e) {
-    // throw new ItemNotFoundException("Can't find user to update");
-    // }
-    // }
-
     // Exception Handler
     @ExceptionHandler(ItemNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String queryItemNotFound(ItemNotFoundException e) {
-        // TODO: change this out for a log message
         System.out.println(e.getMessage());// we would want to log this instead in the real world
         return e.getMessage();
     }

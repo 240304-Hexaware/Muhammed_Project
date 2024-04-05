@@ -1,1 +1,4 @@
-Mikoyan             Mikoyan M3          1980      Turbofan  
+Mikoyan             Mikoyan M3          1980       Turbofan            
+Sukhoi Design       Bureau Su-35S       2014       Turbofan            
+Dassault Aviation   Rafale B            2004      Twin-engine turbofan
+Boeing              747-400             1989      High-bypass turbofan

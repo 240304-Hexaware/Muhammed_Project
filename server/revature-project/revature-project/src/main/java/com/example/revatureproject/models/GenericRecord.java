@@ -28,7 +28,6 @@ public class GenericRecord extends org.bson.Document {
     public GenericRecord() {
     }
 
-
     public ObjectId get_id() {
         return this._id;
     }

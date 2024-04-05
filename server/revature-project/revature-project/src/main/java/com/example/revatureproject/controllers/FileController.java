@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.Meta;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,16 +25,11 @@ import com.example.revatureproject.services.FileService;
 public class FileController {
     private FileService fileService;
 
-
     @Autowired
     public FileController(FileService fileService) {
         this.fileService = fileService;
     }
-    // read the specFile as a json and convert it to a map<String, Field> (service)
-
-    // flat file comes form postman as a post mapping to upload the file
-    // then read the file and return it as a string
-
+  
     @PostMapping("/uploadFile")
     public ResponseEntity<Metadata> uploadFile(@RequestParam("flatFile") MultipartFile flatFile, @RequestParam("specFile") String folderName) throws IOException {
         try {
@@ -44,8 +38,7 @@ public class FileController {
 
         } catch (Exception e) {
             throw new IOException(e);
-        }
-        
+        } 
     }
 
     @PostMapping("/parseFile")

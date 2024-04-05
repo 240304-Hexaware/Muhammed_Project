@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 )
 public class RevatureProjectApplication {
 
-
 	/**
 	 * This method will help fix the problem where Jackson serializes the ID field as an ID object with timestamp and date.
 	 * Spring will already create a bean to do this, we are specifying a more specific bean here that spring will use
