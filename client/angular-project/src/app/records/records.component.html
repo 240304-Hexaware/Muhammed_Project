@@ -33,23 +33,7 @@
       </div>
     </div>
     <div *ngIf="!responseData && responseData == undefined">
-      No data found
+      No Records Found!
     </div>
   </div>
 </div>
-<!-- <button (click)="filter()">Filter Records</button>
-<button (click)="viewAll()">View All Your Records</button>
-<div *ngIf="responseData">
-    <table>
-        <tr>
-            <th *ngFor="let field of getFields(responseData[0])">{{ field }}</th>
-        </tr>
-        <tr *ngFor="let record of responseData">
-            <td *ngFor="let field of getFields(record)">{{ record[field] }}</td>
-        </tr>
-    </table>
-</div>
-<div *ngIf="responseData == null">
-    No records found
-</div> -->
-<!-- get fields and display them dynamically, ie for car, there should be 3 input fields labelled with the appropriate fields -->

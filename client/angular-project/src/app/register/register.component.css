@@ -1,4 +1,3 @@
-/* Body styles (unchanged) */
 body {
     display: flex;
     justify-content: center;
@@ -8,10 +7,7 @@ body {
     font-family: Arial, sans-serif;
   }
   
-  /* Login container and form styles (unchanged) */
-  
   .login-container {
-    /* display: flex; */  /* Commented out, using body flexbox */
     margin-top: 150px;
     justify-content: center;
     align-items: center;
@@ -27,7 +23,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 20px;
-    width: 300px; /* Adjust width as needed */
+    width: 300px; 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     transition: box-shadow 0.2s ease-in-out; /* Add hover effect */
     margin: 0 auto;
@@ -36,9 +32,7 @@ body {
   .login-form:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Increased shadow on hover */
   }
-  
-  /* Form labels and inputs (unchanged) */
-  
+    
   label {
     display: block;
     margin-bottom: 5px;
@@ -50,64 +44,57 @@ body {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px; /* Slightly less rounded corners than form */
-    box-sizing: border-box; /* Include padding in width calculation */
+    border-radius: 5px;
+    box-sizing: border-box; 
   }
-  
-  /* Submit button (unchanged) */
-  
+    
   button[type="submit"] {
-    background-color: #4CAF50; /* Green color for login */
+    background-color: #4CAF50; 
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+    transition: background-color 0.2s ease-in-out; 
   }
   
   button[type="submit"]:hover {
-    background-color: #3e8e41; /* Darker green on hover */
+    background-color: #3e8e41; 
   }
   
-  /* Registration link (unchanged) */
   
   .login-register {
     display: block;
     margin-top: 10px;
     text-align: center;
-    color: #333; /* Gray color for link */
-    transition: color 0.2s ease-in-out; /* Smooth hover effect */
+    color: #333; 
+    transition: color 0.2s ease-in-out; 
   }
   
   .login-register:hover {
-    color: #007bff; /* Blue color on hover */
-    text-decoration: underline; /* Add underline on hover */
+    color: #007bff; 
+    text-decoration: underline;
   }
   
-  /* Register form styles */
   .register-container {
-    /* Similar to login-container styles */
     margin-top: 150px;
     justify-content: center;
     align-items: center;
   }
   
   .register-form {
-    /* Similar to login-form styles */
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 20px;
-    width: 300px; /* Adjust width as needed */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: box-shadow 0.2s ease-in-out; /* Add hover effect */
+    width: 300px; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.2s ease-in-out;
     margin: 0 auto;
   }
   
   .register-form:hover {
-    /* Similar to login-form hover styles */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Increased shadow on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
 
   .role-select {

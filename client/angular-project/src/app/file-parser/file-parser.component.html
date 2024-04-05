@@ -1,21 +1,24 @@
 <div class="file-parser-view">
   <h1 class="header">File Parser</h1>
-<div class="file-selection" fxLayout="row" fxLayoutGap="20px">
-  <div class="file-upload" fxFlex="50">
-    <label class="upload-label">Flat File:</label>
-    <input type="file" (change)="flatFileSelected($event)" />
+  <div class="parent-container">
+    <div class="input-container">
+      <div class="file-upload">
+        <label class="upload-label">Flat File:</label>
+        <input type="file" (change)="flatFileSelected($event)" />
+      </div>
+      <div class="file-upload">
+        <label class="upload-label">Specification File:</label>
+        <input type="file" (change)="specFileSelected($event)" />
+      </div>
+      <div class="record-type-selection">
+        <label class="upload-label select-label">Select Record Type: </label>
+        <select (change)="selectType($event)">
+          <option *ngFor="let type of recordTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+    </div>
   </div>
-  <div class="file-upload" fxFlex="50">
-    <label class="upload-label">Specification File:</label>
-    <input type="file" (change)="specFileSelected($event)" />
-  </div>
-</div>
-<div class="record-type-selection" fxLayout="row" fxLayoutAlign="center center">
-  <label class="upload-label">Select Record Type:</label>
-  <select (change)="selectType($event)" fxFlex>
-    <option *ngFor="let type of recordTypes" [value]="type">{{ type }}</option>
-  </select>
-</div>
+  
 <hr>
 
 <div class="parse-file-button">
@@ -35,24 +38,6 @@
     </div>
   </div>
   <div *ngIf="!responseData && responseData == undefined">
-    No data found
+    No Records Found!
   </div>
 </div>
-
-
-<!-- <div *ngIf="responseData && responseData.length > 0">
-  <table class="records-container">
-    <thead>
-      <tr>
-        <th *ngFor="let field of getObjectKeys(responseData[0])">{{ field }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let record of responseData">
-        <td *ngFor="let key of getObjectKeys(record)">
-          {{ record[key] }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div> -->

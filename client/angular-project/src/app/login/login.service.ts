@@ -9,7 +9,6 @@ import { tap } from 'rxjs';
 })
 export class LoginService {
 
-  // private loggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoggedIn : boolean = false;
   url : string = 'http://localhost:8080';
   username : string = "";
@@ -19,12 +18,7 @@ export class LoginService {
     return this.httpClient.post(this.url + "/login", { username, password }, {
       observe: "response",
       responseType: "text"
-    }).pipe(
-      tap((response) => {
-        // this.username = username;
-        // this.isLoggedIn = true;
-      })
-    );
+    });
   }
 
   setUser(username: string) {

@@ -16,7 +16,6 @@ export class RecordsComponent {
   selectedRecordType: string = "car";
   
   recordTypes: string[] = ["car", "jet", "boat"];
-
   carFields : string[] = ["manufacturer", "model", "year"];
   jetFields : string[] = ["manufacturer", "model", "year", "engineType"];
   boatFields : string[] = ["manufacturer", "model", "year", "color", "length"];
@@ -27,9 +26,8 @@ export class RecordsComponent {
   }
   responseData : any;
   url : string = "http://localhost:8080";
-  httpClient : HttpClient;
 
-  constructor(httpClient : HttpClient, private loginService : LoginService) {
+  constructor(private httpClient : HttpClient, private loginService : LoginService) {
     this.httpClient = httpClient;
   };
 
@@ -39,10 +37,6 @@ export class RecordsComponent {
     const selectedValue = (event.target as HTMLSelectElement).value; // type cast to get value
     this.selectedRecordType = selectedValue;
     this.filterCriteria.clear();
-  }
-
-  getFieldsForSelectedRecordType() {
-    return this.recordTypeFields[this.selectedRecordType] || [];
   }
 
   updateFilterCriteria(field : string, event : Event) {
@@ -65,10 +59,11 @@ export class RecordsComponent {
       }
       
     });
+
     this.responseData = null;
     params = params.append("_recordType", this.selectedRecordType);
     const username : string | null = localStorage.getItem('username');
-    console.log("username:" + username); // this shows the value as blank
+    console.log("username:" + username);
     console.log("logged in: " + this.loginService.isLoggedIn);
     if(username != null) {
       params = params.append("recordUser", username);
@@ -132,13 +127,8 @@ export class RecordsComponent {
     }
     return Object.keys(obj); // Fallback for unknown record types
   }
-  
-  getUniqueFields(obj: any): string[] {
-    // Use a Set to ensure unique values
-    const uniqueFields = new Set<string>();
-    for (const record of this.responseData) {
-      Object.keys(record).forEach((field) => uniqueFields.add(field));
-    }
-    return Array.from(uniqueFields);
+
+  getFieldsForSelectedRecordType() {
+    return this.recordTypeFields[this.selectedRecordType] || [];
   }
 }

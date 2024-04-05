@@ -29,7 +29,6 @@ export class FileParserComponent {
     "boat": this.boatFields
   }
   constructor(httpClient: HttpClient, private loginService : LoginService) {
-    /* the HttpClient needs to be provided, see app.config.ts */
     this.httpClient = httpClient;
   }
 
@@ -77,9 +76,6 @@ export class FileParserComponent {
       next: (data) => {
         console.log("data: ", data);
         this.responseData = data.body;
-        // let fileName: string | null = "file.txt";
-        // let fileBody: string | null = data.body;
-        // this.downloadFile = new Blob([fileBody as string], {type: "text/plain"});
       },
       error: (error: HttpErrorResponse) => {
         console.log("error: ", error);

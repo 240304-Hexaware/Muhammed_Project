@@ -1,11 +1,9 @@
-/* .file-parser-view {
-
-*/
 .header {
-    text-align: center; /* Center the select element horizontally */
+    text-align: center; 
     margin: 0 auto;
     margin-top: 40px;
     margin-bottom: 20px;
+    margin-right: 25px;
   }
 
   select {
@@ -16,49 +14,61 @@
     font-size: 1rem;
   }
 
-  .record-type-selection {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    width: 20%;
-    margin: 0 auto; 
-  }
-
-  /* Label Element */
-  label {
-    margin-right: 1rem; /* Add right margin for spacing between label and input */
-  }
-
-
-  .file-upload {
+  .parent-container {
     display: flex;
-    /* Removed justify-content: space-between; (unnecessary for equal width) */
-    align-items: center; /* Align vertically in the middle */
-    width: 25%; /* Adjust width as needed */
-    margin: 0 auto; /* Center horizontally */ /* Adjust margin for spacing */
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh;  */
   }
   
-  .file-upload label,
-  .file-upload input[type="text"] {
-    flex: 1; /* Make both elements take up equal space */
+  .input-container {
+    display: flex; 
+    flex-direction: column;
+    gap: 20px; 
+    row-gap: 10px;
+  }
+  
+  .file-upload {
+    display: flex;
+    align-items: center;
+  }
+  
+  .upload-label,
+  .upload-label input[type="text"] {
+    flex: 1; /* Makes label and input share available space */
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
-    margin-right: 1rem; /* Remove for no spacing between elements */
+    margin-right: 10px;
+    /* width: 35%; */
   }
 
-  .parse-file-button{
-    display: flex;
-    justify-content: center;
+  .upload-label:hover {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);;
   }
+  .select-label {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    max-width: 250px;
+  }
+
+  .record-type-selection {
+    display: flex; 
+    align-items: center; 
+  }
+
+.parse-file-button{
+  display: flex;
+  justify-content: center;
+}
 
   .btn {
     display: inline-block;
     outline: none;
     cursor: pointer;
     border: 1px solid #0f62fe;
-    text-align: left;
     vertical-align: top;
     padding: calc(.375rem - 3px) 60px calc(.375rem - 3px) 12px;
     background-color: #00000000;
@@ -70,7 +80,6 @@
     font-weight: 400;
     margin-bottom: 15px;
     transition: background 70ms cubic-bezier(0,0,.38,.9),box-shadow 70ms cubic-bezier(0,0,.38,.9),border-color 70ms cubic-bezier(0,0,.38,.9),outline 70ms cubic-bezier(0,0,.38,.9);
-    /* margin-bottom: 10px; */
 }
 
   .btn:hover {
@@ -92,11 +101,10 @@
   }
   
   .record-table {
-    /* border: 1px solid #ddd; */
     border-collapse: collapse;
-    margin-bottom: 1rem; /* Adjust margin for spacing between tables */
-    width: 250px; /* Adjust width as needed */
-    display: table; /* Use 'table' display for proper column layout */
+    margin-bottom: 1rem; 
+    width: 250px; 
+    display: table;
   }
   
   .record-table th,
@@ -110,7 +118,6 @@
     font-weight: bold;
   }
   
-  /* Optional grid padding */
   .grid-pad {
-    padding: 1rem; /* Adjust padding for spacing within the grid */
+    padding: 1rem; 
   }

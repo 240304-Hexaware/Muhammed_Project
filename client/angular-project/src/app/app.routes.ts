@@ -20,7 +20,7 @@ export const routes: Routes = [
         ]
     },
     
-    {path: '', redirectTo: 'login', pathMatch: 'full' }, // Specify pathMatch: 'full'
+    {path: '', redirectTo: 'login', pathMatch: 'full' }, 
     { path: '**', redirectTo: 'login' } // Redirect to login for unknown routes
 ];
 

@@ -17,7 +17,7 @@ export class LoginComponent {
   password : string = "";
   constructor(private loginService: LoginService, private router : Router) {};
 
-  login() { // call auth service to 
+  login() {  
     this.loginService.login(this.username, this.password).subscribe({
       next: (response) => {
           console.log(response.body); // Handle plain text response
@@ -27,12 +27,13 @@ export class LoginComponent {
             console.log("Username: " + this.loginService.getUser());
             localStorage.setItem('username', this.username);
             this.router.navigate(['/parseFile']);
-            console.log("logged in: " + this.loginService.isLoggedIn);
           }
           else {
-            console.log("logged in: " + this.loginService.isLoggedIn);
+            alert("Invalid username or password");
             this.loginService.isLoggedIn = false;
           }
+          console.log("logged in: " + this.loginService.isLoggedIn);
+
       },
       error: (error) => {
         console.error(error); // Handle error
